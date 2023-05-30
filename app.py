@@ -60,5 +60,11 @@ def upload_image():
         return send_file(os.path.join('files', 'output.jpg'), mimetype='image/jpeg')
 
 
+@app.route('/string', methods=['GET', 'POST'])
+def print():
+    text = request.form['name']
+    return text
+
+
 if __name__ == "__main__":
     app.run()
