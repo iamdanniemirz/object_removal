@@ -16,11 +16,13 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+
 def convert_image(image):
     image = np.asarray(image)
     image = image[:, :, :3]
     out = Image.fromarray(image, 'RGB')
     return out
+
 
 def convert_mask(image):
     out = image.convert('L')
@@ -58,12 +60,6 @@ def upload_image():
         os.remove('files/' + mask_name)
 
         return send_file(os.path.join('files', 'output.jpg'), mimetype='image/jpeg')
-
-
-@app.route('/string', methods=['GET', 'POST'])
-def print():
-    text = request.form['name']
-    return text
 
 
 if __name__ == "__main__":

@@ -1,28 +1,9 @@
-#! /usr/bin/env python3
-# -*- coding: utf-8 -*-
-# File   : patch_match.py
-# Author : Jiayuan Mao
-# Email  : maojiayuan@gmail.com
-# Date   : 01/09/2020
-#
-# Distributed under terms of the MIT license.
-
 import ctypes
 import os.path as osp
 from typing import Optional, Union
 
 import numpy as np
 from PIL import Image
-
-# try:
-#     # If the Jacinle library (https://github.com/vacancy/Jacinle) is present, use its auto_travis feature.
-#     from jacinle.jit.cext import auto_travis
-#     auto_travis(__file__, required_files=['*.so'])
-# except ImportError as e:
-#     # Otherwise, fall back to the subprocess.
-#     import subprocess
-#     print('Compiling and loading c extensions from "{}".'.format(osp.realpath(osp.dirname(__file__))))
-#     subprocess.check_call(['./travis.sh'], cwd=osp.dirname(__file__))
 
 
 __all__ = ['set_random_seed', 'set_verbose', 'inpaint', 'inpaint_regularity']
