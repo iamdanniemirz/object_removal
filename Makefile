@@ -52,3 +52,9 @@ rebuild:
 
 # vim:ft=make
 #
+
+# CXXFLAGS += $(shell pkg-config --cflags opencv) -fPIC
+#CXXFLAGS += -I/usr/local/opencv/include/opencv4 -fPIC
+#CXXFLAGS += $(INCLUDE_DIR)
+# LDFLAGS = $(shell pkg-config --cflags --libs opencv) -shared -fPIC
+#LDFLAGS = -L/usr/local/opencv/lib64  -shared -fPIC
