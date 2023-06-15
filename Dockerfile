@@ -47,21 +47,21 @@ RUN make install
 ##COPY --from=ubuntu-builder /usr/share/opencv4/* /usr/share/opencv/
 #COPY --from=ubuntu-builder /usr/lib/x86_64-linux-gnu/* /usr/lib/x86_64-linux-gnu/
 
-#COPY requirements.txt  .
-#COPY app.py .
-#COPY Makefile .
-#COPY patch_match.py .
-#COPY csrc csrc
+COPY requirements.txt  .
+COPY app.py .
+COPY Makefile .
+COPY patch_match.py .
+COPY csrc csrc
 ##COPY build build
-#COPY travis.sh .
+COPY travis.sh .
 ##COPY libpatchmatch.so .
 #
 ##RUN yum update -y
 ##RUN yum install make -y
 ##RUN yum install gcc-c++ -y
 ##RUN yum install pkgconfig -y
-#RUN make
-#RUN pip3 install -r requirements.txt
+RUN make
+# RUN pip3 install -r requirements.txt
 #
 ##EXPOSE 8000
 ##CMD ["python", "app.py"]
