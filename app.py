@@ -1,15 +1,17 @@
-from flask import Flask, flash, request, redirect, jsonify, send_file
-from werkzeug.utils import secure_filename
-import patch_match
-from PIL import Image
+import serverless_wsgi
+from flask import Flask, flash, request, redirect, jsonify, send_file, make_response
 import os
+from werkzeug.utils import secure_filename
 import numpy as np
+from PIL import Image
+import patch_match
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = 'files/'
+UPLOAD_FOLDER = '/tmp/'
 app.secret_key = "secret key"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 
@@ -29,8 +31,8 @@ def convert_mask(image):
     return out
 
 
-@app.route('/', methods=['GET', 'POST'])
-def upload_image():
+@app.route('/', methods=['POST'])
+def hello_world():
     image = request.files['image']
     mask = request.files['mask']
     ps = request.form['ps']
@@ -48,19 +50,24 @@ def upload_image():
         image.save(os.path.join(app.config['UPLOAD_FOLDER'], image_name))
         mask.save(os.path.join(app.config['UPLOAD_FOLDER'], mask_name))
 
-        img = Image.open('files/' + image_name)
+        img = Image.open('/tmp/' + image_name)
         img = convert_image(img)
-        msk = Image.open('files/' + mask_name)
+        msk = Image.open('/tmp/' + mask_name)
         msk = convert_mask(msk)
+
         result = patch_match.inpaint(img, msk, patch_size=int(ps))
         output = Image.fromarray(result, 'RGB')
-        output.save('files/output.jpg')
+        output.save('/tmp/output.jpg')
 
-        os.remove('files/' + image_name)
-        os.remove('files/' + mask_name)
+        os.remove('/tmp/' + image_name)
+        os.remove('/tmp/' + mask_name)
 
-        return send_file(os.path.join('files', 'output.jpg'), mimetype='image/jpeg')
+        return send_file(os.path.join('/tmp', 'output.jpg'), mimetype='image/jpeg')
 
 
-if __name__ == "__main__":
-    app.run()
+def handler(event, context):
+    return serverless_wsgi.handle_request(app, event, context)
+
+
+# if __name__ == '__main__':
+#     app.run(host='0.0.0.0', port=8000)
